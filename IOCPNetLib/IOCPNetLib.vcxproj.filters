@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="NetLib_Client.cpp" />
+    <ClCompile Include="NetLib_Content.cpp" />
+    <ClCompile Include="NetLib_Server.cpp" />
+    <ClCompile Include="Packet.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="NetLib_Client.h" />
+    <ClInclude Include="NetLib_Content.h" />
+    <ClInclude Include="NetLib_Helper.h" />
+    <ClInclude Include="NetLib_Server.h" />
+    <ClInclude Include="NetLibDefine.h" />
+    <ClInclude Include="NetLibraryProtocol.h" />
+    <ClInclude Include="Packet.h" />
+    <ClInclude Include="Session.h" />
+  </ItemGroup>
+</Project>
