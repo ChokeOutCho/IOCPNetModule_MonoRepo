@@ -1,0 +1,9 @@
+{
+  "name": "iocpnetlib",
+  "version": "1.0.0",
+  "dependencies": [
+    "libmysql",
+    "cpp-redis",
+    "tacopie"
+  ]
+}

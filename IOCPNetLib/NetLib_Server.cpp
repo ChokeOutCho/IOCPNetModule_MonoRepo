@@ -571,6 +571,12 @@ bool NetLib_Server::Disconnect(unsigned long long sessionHandle)
 NetLib_Server::NetLib_Server(const WCHAR* openIP, unsigned short openPort, int opt_workerTH_Pool_size, int opt_concurrentTH_size, unsigned short opt_maxOfSession, bool opt_zerocpy, Opt_Encryption* opt_encryption, int opt_maxOfSendPackets)
 {
 	timeBeginPeriod(1);
+	WSADATA wsa;
+	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
+	{
+		printf("\n\n\n\n\nWSAStartUp Failed... code: %d\n\n\n\n\n", GetLastError());
+
+	}
 	max_send = INT_MIN;
 
 	m_sessionCount = 0;
@@ -596,14 +602,13 @@ NetLib_Server::NetLib_Server(const WCHAR* openIP, unsigned short openPort, int o
 	m_opt_maxOfSendPackets = opt_maxOfSendPackets;
 	m_sessions = new Session[m_opt_maxOfSession];
 	max_recvPostCnt = 10;
-	m_listen_addr;
 	m_opt_workerTH_count = opt_workerTH_Pool_size;
 	m_opt_concurrentTH_size = opt_concurrentTH_size;
 	ZeroMemory(&m_listen_addr, sizeof(SOCKADDR_IN));
 	unsigned long ip;
 	InetPtonW(AF_INET, openIP, &ip);
 	m_listen_addr.sin_family = AF_INET;
-	m_listen_addr.sin_addr.s_addr = htonl(ip);
+	m_listen_addr.sin_addr.s_addr = ip;
 	m_listen_addr.sin_port = htons(openPort);
 	m_disconnectCount = 0;
 	m_opt_zerocpy = opt_zerocpy;
@@ -621,7 +626,7 @@ NetLib_Server::NetLib_Server(const WCHAR* openIP, unsigned short openPort, int o
 		m_sessionIndexPool.Push(r);
 	}
 
-	WSADATA wsa;
+
 	m_iocpHandle = CreateIoCompletionPort(INVALID_HANDLE_VALUE, 0, 0, opt_concurrentTH_size);
 
 	for (int i = 0; i < opt_workerTH_Pool_size; i++)
@@ -629,11 +634,7 @@ NetLib_Server::NetLib_Server(const WCHAR* openIP, unsigned short openPort, int o
 		m_threadPool[i] = (HANDLE)_beginthreadex(0, 0, WorkerThread, this, 0, 0);
 	}
 
-	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
-	{
-		printf("\n\n\n\n\nWSAStartUp Failed... code: %d\n\n\n\n\n", GetLastError());
 
-	}
 }
 
 NetLib_Server::~NetLib_Server()
