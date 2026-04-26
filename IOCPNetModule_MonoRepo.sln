@@ -14,6 +14,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{7018D4
 		Common\CommonProtocol.h = Common\CommonProtocol.h
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MonitorServer", "MonitorServer\MonitorServer.vcxproj", "{2F118200-1FF6-4AC7-9B1C-035FF51D5018}"
+	ProjectSection(ProjectDependencies) = postProject
+		{56E4826B-B2F3-4A82-B1D9-237F05E8A664} = {56E4826B-B2F3-4A82-B1D9-237F05E8A664}
+		{94CC9AA4-6366-4B50-A3F2-8F9BA39FD0DC} = {94CC9AA4-6366-4B50-A3F2-8F9BA39FD0DC}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "솔루션 항목", "솔루션 항목", "{AB2A5E1C-18D8-4697-AD63-0A176F7A7348}"
+	ProjectSection(SolutionItems) = preProject
+		vcpkg.json = vcpkg.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -46,6 +57,14 @@ Global
 		{AEAF042D-3827-49B4-B872-C392A5C2D9ED}.Release|x64.Build.0 = Release|x64
 		{AEAF042D-3827-49B4-B872-C392A5C2D9ED}.Release|x86.ActiveCfg = Release|Win32
 		{AEAF042D-3827-49B4-B872-C392A5C2D9ED}.Release|x86.Build.0 = Release|Win32
+		{2F118200-1FF6-4AC7-9B1C-035FF51D5018}.Debug|x64.ActiveCfg = Debug|x64
+		{2F118200-1FF6-4AC7-9B1C-035FF51D5018}.Debug|x64.Build.0 = Debug|x64
+		{2F118200-1FF6-4AC7-9B1C-035FF51D5018}.Debug|x86.ActiveCfg = Debug|Win32
+		{2F118200-1FF6-4AC7-9B1C-035FF51D5018}.Debug|x86.Build.0 = Debug|Win32
+		{2F118200-1FF6-4AC7-9B1C-035FF51D5018}.Release|x64.ActiveCfg = Release|x64
+		{2F118200-1FF6-4AC7-9B1C-035FF51D5018}.Release|x64.Build.0 = Release|x64
+		{2F118200-1FF6-4AC7-9B1C-035FF51D5018}.Release|x86.ActiveCfg = Release|Win32
+		{2F118200-1FF6-4AC7-9B1C-035FF51D5018}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

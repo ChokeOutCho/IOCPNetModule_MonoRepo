@@ -19,7 +19,4 @@
     <ClInclude Include="TLSObjectPool.h" />
     <ClInclude Include="DBConnector.h" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="vcpkg.json" />
-  </ItemGroup>
 </Project>

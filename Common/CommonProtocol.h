@@ -1,17 +1,18 @@
 
 #pragma once
 
+
 enum en_PACKET_TYPE
 {
 	////////////////////////////////////////////////////////
-		//
-		//	Client & Server Protocol
-		//
-		////////////////////////////////////////////////////////
+	//
+	//	Client & Server Protocol
+	//
+	////////////////////////////////////////////////////////
 
-		//------------------------------------------------------
-		// Chatting Server
-		//------------------------------------------------------
+	//------------------------------------------------------
+	// Chatting Server
+	//------------------------------------------------------
 	en_PACKET_CS_CHAT_SERVER = 0,
 
 	//------------------------------------------------------------
@@ -419,13 +420,6 @@ enum en_PACKET_CS_MONITOR_TOOL_SERVER_CONTROL
 };
 
 
-enum en_PACKET_CS_MONITOR_TOOL_RES_LOGIN
-{
-	dfMONITOR_TOOL_LOGIN_OK = 1,		// 로그인 성공
-	dfMONITOR_TOOL_LOGIN_ERR_NOSERVER = 2,		// 서버이름 오류 (매칭미스)
-	dfMONITOR_TOOL_LOGIN_ERR_SESSIONKEY = 3,		// 로그인 세션키 오류
-};
-
 enum en_PACKET_SS_MONITOR_DATA_UPDATE
 {
 	dfMONITOR_DATA_TYPE_LOGIN_SERVER_RUN = 1,		// 로그인서버 실행여부 ON / OFF
@@ -466,4 +460,12 @@ enum en_PACKET_SS_MONITOR_DATA_UPDATE
 	dfMONITOR_DATA_TYPE_MONITOR_NETWORK_RECV = 42,		// 서버컴퓨터 네트워크 수신량 KByte
 	dfMONITOR_DATA_TYPE_MONITOR_NETWORK_SEND = 43,		// 서버컴퓨터 네트워크 송신량 KByte
 	dfMONITOR_DATA_TYPE_MONITOR_AVAILABLE_MEMORY = 44,		// 서버컴퓨터 사용가능 메모리
+};
+
+
+enum en_PACKET_CS_MONITOR_TOOL_RES_LOGIN
+{
+	dfMONITOR_TOOL_LOGIN_OK = 1,		// 로그인 성공
+	dfMONITOR_TOOL_LOGIN_ERR_NOSERVER = 2,		// 서버이름 오류 (매칭미스)
+	dfMONITOR_TOOL_LOGIN_ERR_SESSIONKEY = 3,		// 로그인 세션키 오류
 };
