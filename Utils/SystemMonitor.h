@@ -124,7 +124,7 @@ public:
 
 		m_recv_prevInOctets = inBytes;
 		m_recv_prevTick = nowTick;
-		return kbps;
+		return kbps/8;
 	}
 
 	float ProcessorTotal(void) { return m_processorTotal; }

@@ -689,8 +689,8 @@ void Monitoring(float deltaTime)
 		long availMem = system_monitor.GetAvailMemMB();
 		long long processMem = system_monitor.GetProcessPrivateMB();
 		long long npMem = system_monitor.GetNonPagedMB();
-		int netSend = (int)(system_monitor.GetTotalSendKBps()/8);
-		int netRecv = (int)(system_monitor.GetTotalRecvKBps()/8);
+		int netSend = (int)(system_monitor.GetTotalSendKBps());
+		int netRecv = (int)(system_monitor.GetTotalRecvKBps());
 		float processorTotal = system_monitor.ProcessorTotal();
 		float processorUser = system_monitor.ProcessorKernel();
 		float processorKernel = system_monitor.ProcessorKernel();
