@@ -2,7 +2,7 @@
 #include <fstream>
 #include <string>
 
-#define MAX_PAIRS 10
+#define MAX_PAIRS 30
 #define MAX_KEY_LEN 32
 #define MAX_VAL_LEN 64
 

@@ -1,0 +1,15 @@
+﻿[TPS_MOV_REQ] [2026-05-02 18:14:00 / DEBUG / 00000005] update max message acc: 10000 req: 3
+[TPS_MOV_REQ] [2026-05-02 18:14:01 / DEBUG / 00000006] update max message acc: 10000 req: 7
+[TPS_MOV_REQ] [2026-05-02 18:14:13 / DEBUG / 00000004] update max message acc: 10000 req: 3
+[TPS_MOV_REQ] [2026-05-02 18:14:14 / DEBUG / 00000006] update max message acc: 10000 req: 6
+[TPS_MOV_REQ] [2026-05-02 18:14:59 / DEBUG / 00000005] update max message acc: 30351 req: 3
+[TPS_MOV_REQ] [2026-05-02 18:14:59 / DEBUG / 00000006] update max message acc: 30350 req: 6
+[TPS_MOV_REQ] [2026-05-02 18:15:02 / DEBUG / 00000021] update max message acc: 32661 req: 8
+[TPS_MOV_REQ] [2026-05-02 18:15:02 / DEBUG / 00000022] update max message acc: 32657 req: 9
+[TPS_MOV_REQ] [2026-05-02 18:15:02 / DEBUG / 00000024] update max message acc: 30363 req: 10
+[TPS_MOV_REQ] [2026-05-02 18:15:03 / DEBUG / 00000026] update max message acc: 34549 req: 11
+[TPS_MOV_REQ] [2026-05-02 18:15:03 / DEBUG / 00000027] update max message acc: 32131 req: 12
+[TPS_MOV_REQ] [2026-05-02 18:15:03 / DEBUG / 00000029] update max message acc: 31904 req: 13
+[TPS_MOV_REQ] [2026-05-02 18:15:03 / DEBUG / 00000030] update max message acc: 33656 req: 14
+[TPS_MOV_REQ] [2026-05-02 18:15:03 / DEBUG / 00000031] update max message acc: 31376 req: 16
+[TPS_MOV_REQ] [2026-05-02 18:15:03 / DEBUG / 00000032] update max message acc: 30706 req: 17

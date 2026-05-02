@@ -11,6 +11,6 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="monitor_config.txt" />
+    <None Include="monitor_config.cfg" />
   </ItemGroup>
 </Project>

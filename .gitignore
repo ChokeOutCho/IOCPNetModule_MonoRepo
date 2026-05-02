@@ -2,4 +2,7 @@
 bin/
 obj/
 vcpkg_installed/
+
+redis_data/
+mysql_data/
 *.user

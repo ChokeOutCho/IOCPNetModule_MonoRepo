@@ -70,92 +70,91 @@ unsigned int __stdcall NetLib_Server::WorkerThread(void* argv)
 				while (1)
 				{
 					if (++session->recvPostCnt > server->max_recvPostCnt)
+					{
+						WCHAR IPPort[32];
+						NetLib_Helper::IPPortToWstring(session->IP, session->Port, IPPort, 32);
+						LOG(L"Wrong_RecvPost_Count", LEVEL_DEBUG, L"%s Wrong Recv Post Count", IPPort);
+						session->m_leave_code = WRONG_RECVPOST_COUNT;
+						server->Disconnect(session->SessionHandle);
+						break;
+					}
+
+					char iobuf[PAYLOAD_LEN_DEFAULT];
+					if (currRecvBuffer->GetUseSize() < sizeof(NetHeader)) break; // 헤더 까보기
+					NetHeader* header = (NetHeader*)iobuf;
+					char* payload = iobuf + sizeof(NetHeader);
+					int ret_peek = currRecvBuffer->Peek((char*)header, sizeof(NetHeader));
+
+					if (header->Code != server->m_header_code)
+
+					{
+						WCHAR IPPort[32];
+						NetLib_Helper::IPPortToWstring(session->IP, session->Port, IPPort, 32);
+						LOG(L"Wrong_Header_Code", LEVEL_DEBUG, L"%s Wrong Header Code = %d", IPPort, header->Code);
+						session->m_leave_code = WRONG_HEADER_LEN;
+						server->Disconnect(session->SessionHandle);
+						break;
+					}
+
+					if (header->Len > PAYLOAD_LEN_DEFAULT)
+					{
+						WCHAR IPPort[32];
+						NetLib_Helper::IPPortToWstring(session->IP, session->Port, IPPort, 32);
+						LOG(L"Wrong_Header_Len", LEVEL_DEBUG, L"%s Wrong Header Len = %d", IPPort, header->Len);
+						session->m_leave_code = WRONG_HEADER_LEN;
+						server->Disconnect(session->SessionHandle);
+						break;
+					}
+
+					// 데이터 있으면 패킷으로 카피
+					if (currRecvBuffer->GetUseSize() < sizeof(NetHeader) + header->Len) break;
+					currRecvBuffer->MoveFront(sizeof(NetHeader));
+
+					// 바이트스트림 링버퍼라 카피떠야 한번에 빼기가 편함
+					int ret_deq = currRecvBuffer->Dequeue(payload, header->Len);
+
+					if (server->m_opt_encryption)
+					{
+						decoder.SetBuffers(&header->CheckSum, &header->CheckSum, header->Len + 1);
+						decoder.SetKeys(server->m_fixed_key, header->RandKey);
+						decoder.Decode();
+						unsigned char checkSum = decoder.CalculateChecksum((unsigned char*)payload, header->Len);
+
+						if (checkSum != header->CheckSum)
 						{
 							WCHAR IPPort[32];
 							NetLib_Helper::IPPortToWstring(session->IP, session->Port, IPPort, 32);
-							LOG(L"Wrong_RecvPost_Count", LEVEL_DEBUG, L"%s Wrong Recv Post Count", IPPort);
-							session->m_leave_code = WRONG_RECVPOST_COUNT;
+							LOG(L"Wrong_Header_CheckSum", LEVEL_DEBUG, L"%s Wrong Checksum", IPPort);
+							session->m_leave_code = WRONG_HEADER_CHECKSUM;
 							server->Disconnect(session->SessionHandle);
 							break;
 						}
 
-						char iobuf[PAYLOAD_LEN_DEFAULT];
-						if (currRecvBuffer->GetUseSize() < sizeof(NetHeader)) break; // 헤더 까보기
-						NetHeader* header = (NetHeader*)iobuf;
-						char* payload = iobuf + sizeof(NetHeader);
-						int ret_peek = currRecvBuffer->Peek((char*)header, sizeof(NetHeader));
+					}
 
-						if (header->Code != server->m_header_code)
+					session->cumulative_recv++;
+					session->recvPostCnt = 0;
+					if (session->m_content == nullptr)
+					{
+						Packet* packet = Packet::Alloc();
+						//packet->type = Packet::eType::RECVPROC;
+						packet->PutData(payload, header->Len);
+						server->OnRecv(session->SessionHandle, packet);
+						Packet::Free(packet);
+					}
+					else
+					{
+						// TODO 패킷 뷰어를 만들어서 넘기는게 좋아보임.
+						ContentQueueHeader cheader{ header->Len };
+						if (currContentBuffer->Enqueue((char*)&cheader, sizeof(ContentQueueHeader)) == 0 ||
+							currContentBuffer->Enqueue(payload, header->Len) == 0)
+						{
+							server->Disconnect(session->SessionHandle);
+							break;
+						}
 
-							{
-								WCHAR IPPort[32];
-								NetLib_Helper::IPPortToWstring(session->IP, session->Port, IPPort, 32);
-								LOG(L"Wrong_Header_Code", LEVEL_DEBUG, L"%s Wrong Header Code = %d", IPPort, header->Code);
-								session->m_leave_code = WRONG_HEADER_LEN;
-								server->Disconnect(session->SessionHandle);
-								break;
-							}
-
-								if (header->Len > PAYLOAD_LEN_DEFAULT)
-									{
-										WCHAR IPPort[32];
-										NetLib_Helper::IPPortToWstring(session->IP, session->Port, IPPort, 32);
-										LOG(L"Wrong_Header_Len", LEVEL_DEBUG, L"%s Wrong Header Len = %d", IPPort, header->Len);
-										session->m_leave_code = WRONG_HEADER_LEN;
-										server->Disconnect(session->SessionHandle);
-										break;
-									}
-
-										// 데이터 있으면 패킷으로 카피
-									if (currRecvBuffer->GetUseSize() < sizeof(NetHeader) + header->Len) break;
-									currRecvBuffer->MoveFront(sizeof(NetHeader));
-
-									// 바이트스트림 링버퍼라 카피떠야 한번에 빼기가 편함
-									int ret_deq = currRecvBuffer->Dequeue(payload, header->Len);
-
-									if (server->m_opt_encryption)
-									{
-
-										decoder.SetBuffers(&header->CheckSum, &header->CheckSum, header->Len + 1);
-										decoder.SetKeys(server->m_fixed_key, header->RandKey);
-										decoder.Decode();
-										unsigned char checkSum = decoder.CalculateChecksum((unsigned char*)payload, header->Len);
-
-										if (checkSum != header->CheckSum)
-											{
-												WCHAR IPPort[32];
-												NetLib_Helper::IPPortToWstring(session->IP, session->Port, IPPort, 32);
-												LOG(L"Wrong_Header_CheckSum", LEVEL_DEBUG, L"%s Wrong Checksum", IPPort);
-												session->m_leave_code = WRONG_HEADER_CHECKSUM;
-												server->Disconnect(session->SessionHandle);
-												break;
-											}
-
-									}
-
-									session->cumulative_recv++;
-									session->recvPostCnt = 0;
-									if (session->m_content == nullptr)
-									{
-										Packet* packet = Packet::Alloc();
-										//packet->type = Packet::eType::RECVPROC;
-										packet->PutData(payload, header->Len);
-										server->OnRecv(session->SessionHandle, packet);
-										Packet::Free(packet);
-									}
-									else
-									{
-										// TODO 패킷 뷰어를 만들어서 넘기는게 좋아보임.
-										ContentQueueHeader cheader{ header->Len };
-										if (currContentBuffer->Enqueue((char*)&cheader, sizeof(ContentQueueHeader)) == 0 ||
-											currContentBuffer->Enqueue(payload, header->Len) == 0)
-											{
-												server->Disconnect(session->SessionHandle);
-												break;
-											}
-
-												//session->m_contentQueue.Enqueue(packet);
-									}
+						//session->m_contentQueue.Enqueue(packet);
+					}
 				}
 				if (server->Increment_IOCount(session) == true)
 				{
@@ -195,7 +194,7 @@ unsigned int __stdcall NetLib_Server::WorkerThread(void* argv)
 				unsigned short index;
 				server->DecodeSessionHandle(session->SessionHandle, &index, nullptr);
 				server->m_sessionIndexPool.Push(index);
-				InterlockedDecrement16((short*)& server->m_sessionCount);
+				InterlockedDecrement16((short*)&server->m_sessionCount);
 				continue;
 			}
 			else if (overlapped == session->overlapped_enter)
@@ -344,7 +343,7 @@ unsigned int __stdcall NetLib_Server::AcceptThread(void* argv)
 		Session* newSession;
 
 		// 스택에서 인덱스 팝
-		InterlockedIncrement16((short*) & server->m_sessionCount);
+		InterlockedIncrement16((short*)&server->m_sessionCount);
 		unsigned short index;
 		server->m_sessionIndexPool.Pop(&index);
 		newSession = &server->m_sessions[index]; // 해당 인덱스에 새로운 세션 할당
@@ -429,7 +428,7 @@ bool NetLib_Server::SendPacket(unsigned long long sessionHandle, Packet* packet)
 
 	// 송신버퍼 적재 가능량 초과
 	// 세션을 즉시 끊음
-	if (sendqueue_size > m_opt_maxOfSendPackets) 
+	if (sendqueue_size > m_opt_maxOfSendPackets)
 	{
 		session->m_leave_code = SESSION_LEAVE_CODE::SEND_FULL;
 		ReturnSession(session);

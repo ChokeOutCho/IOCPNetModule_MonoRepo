@@ -145,9 +145,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="chat_config.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Define.h" />
     <ClInclude Include="MonitorClient.h" />
     <ClInclude Include="Player.h" />
@@ -167,6 +164,9 @@
     <ProjectReference Include="..\Utils\Utils.vcxproj">
       <Project>{56e4826b-b2f3-4a82-b1d9-237f05e8a664}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="chat_config.cfg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

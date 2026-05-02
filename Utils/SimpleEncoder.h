@@ -1,6 +1,6 @@
 #pragma once
 
-#define MAX_PACKET_SIZE 127
+#define MAX_PACKET_SIZE 1400
 
 class SimpleEncoder
 {

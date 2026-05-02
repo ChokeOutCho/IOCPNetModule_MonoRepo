@@ -1,0 +1,10 @@
+﻿[TPS_MSG_REQ] [2026-05-02 18:14:00 / DEBUG / 00000004] update max message acc: 10000 req: 4
+[TPS_MSG_REQ] [2026-05-02 18:14:14 / DEBUG / 00000005] update max message acc: 10000 req: 1
+[TPS_MSG_REQ] [2026-05-02 18:14:15 / DEBUG / 00000007] update max message acc: 10000 req: 5
+[TPS_MSG_REQ] [2026-05-02 18:14:20 / DEBUG / 00000008] update max message acc: 10000 req: 6
+[TPS_MSG_REQ] [2026-05-02 18:14:22 / DEBUG / 00000009] update max message acc: 10000 req: 7
+[TPS_MSG_REQ] [2026-05-02 18:14:59 / DEBUG / 00000004] update max message acc: 30351 req: 6
+[TPS_MSG_REQ] [2026-05-02 18:15:02 / DEBUG / 00000020] update max message acc: 30327 req: 8
+[TPS_MSG_REQ] [2026-05-02 18:15:02 / DEBUG / 00000023] update max message acc: 32082 req: 9
+[TPS_MSG_REQ] [2026-05-02 18:15:02 / DEBUG / 00000025] update max message acc: 34019 req: 10
+[TPS_MSG_REQ] [2026-05-02 18:15:03 / DEBUG / 00000028] update max message acc: 34547 req: 17

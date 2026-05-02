@@ -4,8 +4,6 @@
 #include <unordered_map>
 #include <stack>
 
-#include <mysql/errmsg.h>
-
 #include "conio.h"
 #include "CommonProtocol.h"
 #include "Define.h"
@@ -21,6 +19,8 @@
 #include "MonitorTool.h"
 #include "MonitorData.h"
 #include "SystemMonitor.h"
+#include <mysql/mysql.h>
+#include <mysql/errmsg.h>
 float WaitForTime(int tick, DWORD* prevTime);
 void ServerControl();
 
@@ -405,7 +405,7 @@ void Content_Proc(unsigned long long sessionHandle, WORD contentType, Packet* pa
 
 unsigned int __stdcall ClientContentThread(void* params)
 {
-	DBConnector db("127.0.0.1", "root", "goqudeo2@", "logdb");
+	DBConnector db("127.0.0.1", "root", "whtjdcks", "logdb");
 	float db_delta_cumulative = 0;
 	DWORD prevTime = timeGetTime();
 	MonitorDataSample samples[MONITOR_SAMPLE_MAX];
@@ -587,7 +587,7 @@ int main()
 	int opt_encryption_fixed_key;
 	{
 		Parser parser;
-		if (parser.loadFromFile("monitor_config.txt"))
+		if (parser.loadFromFile("monitor_config.cfg"))
 		{
 			opt_serverport = parser.GetInt("port");
 			opt_poolsize = parser.GetInt("workerTH_Pool_size");

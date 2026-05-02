@@ -1,0 +1,17 @@
+﻿[SendQueue_Max] [2026-05-02 18:13:59 / ERROR / 00000003] maxsize: 0
+[SendQueue_Max] [2026-05-02 18:14:12 / ERROR / 00000003] maxsize: 0
+[SendQueue_Max] [2026-05-02 18:14:58 / ERROR / 00000003] maxsize: 0
+[SendQueue_Max] [2026-05-02 18:15:00 / ERROR / 00000008] maxsize: 1
+[SendQueue_Max] [2026-05-02 18:15:00 / ERROR / 00000009] maxsize: 2
+[SendQueue_Max] [2026-05-02 18:15:00 / ERROR / 00000010] maxsize: 3
+[SendQueue_Max] [2026-05-02 18:15:00 / ERROR / 00000011] maxsize: 4
+[SendQueue_Max] [2026-05-02 18:15:00 / ERROR / 00000012] maxsize: 5
+[SendQueue_Max] [2026-05-02 18:15:00 / ERROR / 00000013] maxsize: 6
+[SendQueue_Max] [2026-05-02 18:15:00 / ERROR / 00000014] maxsize: 7
+[SendQueue_Max] [2026-05-02 18:15:00 / ERROR / 00000015] maxsize: 8
+[SendQueue_Max] [2026-05-02 18:15:00 / ERROR / 00000016] maxsize: 10
+[SendQueue_Max] [2026-05-02 18:15:00 / ERROR / 00000017] maxsize: 11
+[SendQueue_Max] [2026-05-02 18:15:00 / ERROR / 00000018] maxsize: 13
+[SendQueue_Max] [2026-05-02 18:15:00 / ERROR / 00000019] maxsize: 15
+[SendQueue_Max] [2026-05-02 18:15:05 / ERROR / 00000033] maxsize: 17
+[SendQueue_Max] [2026-05-02 18:15:14 / ERROR / 00000034] maxsize: 19

@@ -4,7 +4,7 @@
 #include "../Utils/TLSObjectPool.h"
 #include "../Utils/Profiler.h"
 #include "NetLibraryProtocol.h"
-#define PAYLOAD_LEN_DEFAULT 127
+#define PAYLOAD_LEN_DEFAULT 1400
 enum class eType
 {
 	SENDPACKET,
@@ -12,7 +12,6 @@ enum class eType
 	RECVPROC,
 	LOGIN,
 	SENDPOST,
-	SENDPACKETFAST,
 	NETALLOC,
 	ALLOC,
 };

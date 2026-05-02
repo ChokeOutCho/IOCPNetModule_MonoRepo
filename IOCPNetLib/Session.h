@@ -221,7 +221,7 @@ public:
 #pragma warning(disable : 26495) // C26495 멤버 변수 초기화 경고문 억제
 	Session()//, m_sendBuffer(10000)
 	{
-		m_recvBuffer = new RingBuffer(128);
+		m_recvBuffer = new RingBuffer(2048);
 		m_recvrecvBuffer = new RingBuffer(2048);
 		m_sendPackets = new Packet * [SEND_PACKET_COUNT];
 		m_sendPacketCount = 0;

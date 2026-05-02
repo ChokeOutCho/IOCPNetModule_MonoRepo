@@ -47,7 +47,7 @@ unsigned long dummyIP_2;
 unsigned long dummyIP_3;
 
 const char* TEMP_USER_PASS = "97d7563773fed1fcb8896a35d82a2ba143e3d0c74481c2740e29836a69a1c1f7dc483701bf53918ca01fc71be825e81e1c6a786dcdb54a8e724854ecb01dd649";
-TLSDBConnector db("127.0.0.1", "root", "goqudeo2@", "accountdb");
+TLSDBConnector* db;
 cpp_redis::client* redisClient;
 MonitorClient* monitorClient;
 SystemMonitor system_monitor;
@@ -238,38 +238,38 @@ void Content_Proc(unsigned long long sessionHandle, WORD contentType, Packet* pa
 
 		// 로그인 요청
 		// 계정DB에 접근해서 읽기.
-		std::wstring query = L"SELECT * FROM account WHERE accountno = " + std::to_wstring(AccountNo) + L";";
-		DBConnector* connector = db.GetInstance();
-		if (connector->TryPingAndConnect() == false)
-		{
-			LOG(L"DB", LEVEL_DEBUG, L"threadID: %d, errcode: %d, msg: %s, errno: %d, query: %s",
-				GetCurrentThreadId(), connector->GetLastError(), connector->GetLastErrorMsg().c_str(), connector->GetLastErrorNo(), query.c_str());
-			server->Disconnect(sessionHandle);
-			return;
-		}
+		//std::wstring query = L"SELECT * FROM account WHERE accountno = " + std::to_wstring(AccountNo) + L";";
+		//DBConnector* connector = db->GetInstance();
+		//if (connector->TryPingAndConnect() == false)
+		//{
+		//	LOG(L"DB", LEVEL_DEBUG, L"threadID: %d, errcode: %d, msg: %s, errno: %d, query: %s",
+		//		GetCurrentThreadId(), connector->GetLastError(), connector->GetLastErrorMsg().c_str(), connector->GetLastErrorNo(), query.c_str());
+		//	server->Disconnect(sessionHandle);
+		//	return;
+		//}
 
-		MYSQL_RES* sql_res = connector->Read(query);
-		if (sql_res == nullptr)
-		{
-			LOG(L"DB", LEVEL_DEBUG, L"threadID: %d, errcode: %d, msg: %s, errno: %d, query: %s",
-				GetCurrentThreadId(), connector->GetLastError(), connector->GetLastErrorMsg().c_str(), connector->GetLastErrorNo(), query.c_str());
-			server->Disconnect(sessionHandle);
-			return;
-		}
+		//MYSQL_RES* sql_res = connector->Read(query);
+		//if (sql_res == nullptr)
+		//{
+		//	LOG(L"DB", LEVEL_DEBUG, L"threadID: %d, errcode: %d, msg: %s, errno: %d, query: %s",
+		//		GetCurrentThreadId(), connector->GetLastError(), connector->GetLastErrorMsg().c_str(), connector->GetLastErrorNo(), query.c_str());
+		//	server->Disconnect(sessionHandle);
+		//	return;
+		//}
 
-		MYSQL_ROW sql_row;
-		bool correct = false;
-		sql_row = mysql_fetch_row(sql_res);
-		if (memcmp(TEMP_USER_PASS, sql_row[2], SESSIONKEY_LENGTH) == 0)
-			correct = true;
-		mysql_free_result(sql_res);
+		//MYSQL_ROW sql_row;
+		//bool correct = false;
+		//sql_row = mysql_fetch_row(sql_res);
+		//if (memcmp(TEMP_USER_PASS, sql_row[2], SESSIONKEY_LENGTH) == 0)
+		//	correct = true;
+		//mysql_free_result(sql_res);
 
-		if (correct == false)
-		{
-			LOG(L"LOGIN_SessionKey", LEVEL_DEBUG, L"Invalid Token");
-			server->Disconnect(sessionHandle);
-			return;
-		}
+		//if (correct == false)
+		//{
+		//	LOG(L"LOGIN_SessionKey", LEVEL_DEBUG, L"Invalid Token");
+		//	server->Disconnect(sessionHandle);
+		//	return;
+		//}
 
 		// Redis에 삽입
 		// 
@@ -410,6 +410,11 @@ int main()
 	bool opt_zerocpy;
 	int opt_encryption_header_code;
 	int opt_encryption_fixed_key;
+
+	char db_ip[20];
+	int db_port;
+	char db_user[30];
+	char db_password[30];
 	{
 		Parser parser;
 		if (parser.loadFromFile("login_config.cfg"))
@@ -424,6 +429,11 @@ int main()
 			opt_encryption_fixed_key = (char)parser.GetInt("encryption_fixed_key");
 
 			opt_zerocpy = parser.GetBool("zerocopy");
+
+			parser.CopyString("db_ip", db_ip, 30);
+			db_port = parser.GetInt("db_port");
+			parser.CopyString("db_user", db_user, 30);
+			parser.CopyString("db_password", db_password, 30);
 
 			char gameServerIP[16];
 			char chatServerIP[16];
@@ -445,8 +455,8 @@ int main()
 			mbstowcs_s(&converted, ChatServerIP_DUMMY_3, chatServer_Dummy_3_IP, _TRUNCATE);
 
 
-			GameServerPort = (unsigned short)parser.GetInt("GameServerPort");
-			ChatServerPort = (unsigned short)parser.GetInt("ChatServerPort");
+			GameServerPort = parser.GetInt("GameServerPort");
+			ChatServerPort = parser.GetInt("ChatServerPort");
 		}
 		else
 		{
@@ -455,7 +465,7 @@ int main()
 			return -1;
 		}
 	}
-
+	db = new TLSDBConnector("127.0.0.1", "root", "whtjdcks", "accountdb");
 
 	ContentEvent = CreateEvent(0, 0, 0, 0);
 	HANDLE contentTh = (HANDLE)_beginthreadex(nullptr, 0, ContentThread, 0, 0, 0);

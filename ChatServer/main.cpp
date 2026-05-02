@@ -1,7 +1,4 @@
 ﻿#pragma comment(lib, "Winmm.lib")
-#pragma comment(lib, "tacopie.lib")
-#pragma comment(lib, "cpp_redis.lib")
-
 #include <cpp_redis/cpp_redis>
 #include <queue>
 #include <unordered_map>
@@ -706,7 +703,7 @@ int main()
 	int opt_sendbuf;
 	{
 		Parser parser;
-		if (parser.loadFromFile("chat_config.txt"))
+		if (parser.loadFromFile("chat_config.cfg"))
 		{
 			opt_serverport = parser.GetInt("port");
 			opt_poolsize = parser.GetInt("workerTH_Pool_size");
