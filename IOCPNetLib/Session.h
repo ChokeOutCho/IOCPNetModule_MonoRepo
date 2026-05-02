@@ -171,6 +171,7 @@ public:
 		flags = 0;
 
 		int freeSize = m_recvBuffer->GetFreeSize(front_recv, rear_recv) - directSize_recv;
+		// 링 버퍼보다 큰 패킷쌓기 방어
 		if (directSize_recv == 0 && freeSize == 0)
 		{
 			return false;

@@ -69,6 +69,7 @@ unsigned int __stdcall NetLib_Server::WorkerThread(void* argv)
 
 				while (1)
 				{
+					// 패킷 하나를 여러번에 걸쳐서 완성시키기 방어
 					if (++session->recvPostCnt > server->max_recvPostCnt)
 					{
 						WCHAR IPPort[32];
@@ -79,14 +80,15 @@ unsigned int __stdcall NetLib_Server::WorkerThread(void* argv)
 						break;
 					}
 
+					// 헤더 확인
 					char iobuf[PAYLOAD_LEN_DEFAULT];
-					if (currRecvBuffer->GetUseSize() < sizeof(NetHeader)) break; // 헤더 까보기
+					if (currRecvBuffer->GetUseSize() < sizeof(NetHeader)) break;
 					NetHeader* header = (NetHeader*)iobuf;
 					char* payload = iobuf + sizeof(NetHeader);
 					int ret_peek = currRecvBuffer->Peek((char*)header, sizeof(NetHeader));
 
+					// 헤더 변조 방어
 					if (header->Code != server->m_header_code)
-
 					{
 						WCHAR IPPort[32];
 						NetLib_Helper::IPPortToWstring(session->IP, session->Port, IPPort, 32);
@@ -95,7 +97,6 @@ unsigned int __stdcall NetLib_Server::WorkerThread(void* argv)
 						server->Disconnect(session->SessionHandle);
 						break;
 					}
-
 					if (header->Len > PAYLOAD_LEN_DEFAULT)
 					{
 						WCHAR IPPort[32];
@@ -106,20 +107,21 @@ unsigned int __stdcall NetLib_Server::WorkerThread(void* argv)
 						break;
 					}
 
-					// 데이터 있으면 패킷으로 카피
+					// 헤더 유효하면 페이로드 추출
 					if (currRecvBuffer->GetUseSize() < sizeof(NetHeader) + header->Len) break;
 					currRecvBuffer->MoveFront(sizeof(NetHeader));
 
-					// 바이트스트림 링버퍼라 카피떠야 한번에 빼기가 편함
-					int ret_deq = currRecvBuffer->Dequeue(payload, header->Len);
+					
+					int ret_deq = currRecvBuffer->Dequeue(payload, header->Len); // 바이트스트림 링버퍼라 카피떠야 한번에 빼기 편함
 
+					// 역난독화
 					if (server->m_opt_encryption)
 					{
 						decoder.SetBuffers(&header->CheckSum, &header->CheckSum, header->Len + 1);
 						decoder.SetKeys(server->m_fixed_key, header->RandKey);
 						decoder.Decode();
 						unsigned char checkSum = decoder.CalculateChecksum((unsigned char*)payload, header->Len);
-
+						// 체크섬 확인
 						if (checkSum != header->CheckSum)
 						{
 							WCHAR IPPort[32];
@@ -129,7 +131,6 @@ unsigned int __stdcall NetLib_Server::WorkerThread(void* argv)
 							server->Disconnect(session->SessionHandle);
 							break;
 						}
-
 					}
 
 					session->cumulative_recv++;
@@ -211,8 +212,6 @@ unsigned int __stdcall NetLib_Server::WorkerThread(void* argv)
 				{
 					if (server->Decrement_IOCount(session) == true)
 					{
-						//printf("aa\n");
-						//printf("recv 릴리즈에 늦게들어온 놈이 CAS 자체를 재사용 뒤에 하면서 새로 연결된 세션이 끊어질 가능성이 있다. %d\n", ++server->m_disconnectCount);
 
 					}
 
