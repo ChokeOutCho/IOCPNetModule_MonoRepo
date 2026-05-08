@@ -1,23 +1,62 @@
 @echo off
-echo [1/3] ì„œë²„ë“¤ì„ ìˆœì°¨ì ìœ¼ë¡œ ì‹¤í–‰..
+echo [1/4] µ¥ÀÌÅÍº£ÀÌ½º ¹× Ä³½Ã ¼­¹ö¸¦ ±¸µ¿ÇÕ´Ï´Ù (Docker)...
+docker-compose up -d
 
-:: /d ì˜µì…˜ì„ ì‚¬ìš©í•˜ì—¬ exeê°€ ìˆëŠ” í´ë”ë¥¼ ì‘ì—… ë””ë ‰í„°ë¦¬ë¡œ ê°•ì œ ì§€ì •í•©ë‹ˆë‹¤.
+if %errorlevel% neq 0 (
+    echo.
+    echo Docker ±¸µ¿¿¡ ½ÇÆĞÇß½À´Ï´Ù. 
+    echo Docker DesktopÀÌ ½ÇÇà ÁßÀÎÁö, Æ÷Æ®°¡ Ãæµ¹ÇÏÁö ¾Ê´ÂÁö È®ÀÎÇØ ÁÖ¼¼¿ä.
+    pause
+    exit /b
+)
+
+echo.
+echo µ¥ÀÌÅÍº£ÀÌ½º ÃÊ±âÈ­ ´ë±â Áß (15ÃÊ)...
+timeout /t 15 /nobreak >nul
+
+
+
+echo.
+echo [2/4] ¼­¹öµéÀ» ¼øÂ÷ÀûÀ¸·Î ½ÇÇàÇÕ´Ï´Ù...
+
+start /d "bin\x64\Release" "" "MonitorServer.exe"
+echo ¸ğ´ÏÅÍ¸µ ¼­¹ö ½ÇÇà ¿Ï·á. ´ë±â Áß (1ÃÊ)...
+timeout /t 1 /nobreak >nul
+
 start /d "bin\x64\Release" "" "LoginServer.exe"
+echo ·Î±×ÀÎ ¼­¹ö ½ÇÇà ¿Ï·á. ´ë±â Áß (1ÃÊ)...
 timeout /t 1 /nobreak >nul
 
 start /d "bin\x64\Release" "" "ChatServer.exe"
+echo Ã¤ÆÃ ¼­¹ö ½ÇÇà ¿Ï·á. ´ë±â Áß (1ÃÊ)...
 timeout /t 1 /nobreak >nul
 
-start /d "bin\x64\Release" "" "MonitorServer.exe"
-timeout /t 1 /nobreak >nul
+set "all_clear=1"
+
+tasklist /FI "IMAGENAME eq LoginServer.exe" 2>NUL | find /I /N "LoginServer.exe">NUL
+if "%ERRORLEVEL%"=="0" ( echo [ O K ] LoginServer Á¤»ó ÀÛµ¿ Áß ) else ( echo [FAIL] LoginServer ½ÇÇà ½ÇÆĞ! & set "all_clear=0" )
+
+tasklist /FI "IMAGENAME eq ChatServer.exe" 2>NUL | find /I /N "ChatServer.exe">NUL
+if "%ERRORLEVEL%"=="0" ( echo [ O K ] ChatServer Á¤»ó ÀÛµ¿ Áß ) else ( echo [FAIL] ChatServer ½ÇÇà ½ÇÆĞ! & set "all_clear=0" )
+
+tasklist /FI "IMAGENAME eq MonitorServer.exe" 2>NUL | find /I /N "MonitorServer.exe">NUL
+if "%ERRORLEVEL%"=="0" ( echo [ O K ] MonitorServer Á¤»ó ÀÛµ¿ Áß ) else ( echo [FAIL] MonitorServer ½ÇÇà ½ÇÆĞ! & set "all_clear=0" )
+
+if "%all_clear%"=="0" (
+    echo.
+    echo [ERROR] ÇÏ³ª ÀÌ»óÀÇ ¼­¹ö°¡ ±¸µ¿¿¡ ½ÇÆĞÇß½À´Ï´Ù. DB ¿¬°á ¼³Á¤ÀÌ³ª Æ÷Æ®¸¦ È®ÀÎÇØ ÁÖ¼¼¿ä.
+    pause
+    exit /b
+)
 
 echo.
-echo [2/3] ëª¨ë‹ˆí„°ë§ í´ë¼ì´ì–¸íŠ¸ ì‹¤í–‰..
+echo [3/4] ¸ğ´ÏÅÍ¸µ Å¬¶óÀÌ¾ğÆ®¸¦ ½ÇÇàÇÕ´Ï´Ù...
 start /d "Clients\MonitoringClient_20241225" "" "MonitoringClient.exe"
 
-echo [3/3] ë”ë¯¸ í´ë¼ì´ì–¸íŠ¸ë¥¼ ìƒˆ ì°½ìœ¼ë¡œ ì‹¤í–‰..
+echo.
+echo [4/4] ´õ¹Ì Å¬¶óÀÌ¾ğÆ®¸¦ »õ Ã¢À¸·Î ¶ç¿ó´Ï´Ù. (¹øÈ£ Á÷Á¢ ÀÔ·Â ÇÊ¿ä)
 start /d "Clients\ChatDummy_Loginserver_20221114" "" "ChatDummy_Login_20221114.exe"
 
 echo.
-echo ëª¨ë“  í”„ë¡œì„¸ìŠ¤ í˜¸ì¶œ ì™„ë£Œ
+echo ¸ğµç ÇÁ·Î¼¼½º°¡ ¼º°øÀûÀ¸·Î È£ÃâµÇ¾ú½À´Ï´Ù
 pause
