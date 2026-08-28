@@ -1,6 +1,6 @@
 # IOCP 기반 범용 네트워크 모듈 & 섹터 분할이 적용된 채팅 서버 시스템
 
-> 📄 **[네트워크 모듈 상세 아키텍처 (PDF)](https://github.com/ChokeOutCho/IOCPNetModule_MonoRepo/blob/main/IOCP%20Network%20Module.pdf)**
+> 📄 **[네트워크 모듈 상세 아키텍처 (PDF)](https://github.com/ChokeOutCho/IOCPNetModule_MonoRepo/blob/main/IOCP%Network%Module%(IOCP네트워크라이브러리설계).pdf)**
 
 ## 프로젝트 소개
 Windows 환경에서 대용량 트래픽 처리에 특화된 **IOCP 기반의 범용 네트워크 모듈**입니다. 
